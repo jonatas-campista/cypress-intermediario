@@ -1,34 +1,43 @@
-# Testes automatizados com Cypress - Intermediário
+# Cypress Intermediário — testes de GUI, API e CLI no GitLab
 
-👋 Seja bem-vinda(o)!
+![Cypress](https://img.shields.io/badge/Cypress-17202C?logo=cypress&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
-É muito bom tê-la(o) aqui. Tenho certeza que você vai adorar este curso. ❤️
+Suíte de testes automatizados contra uma instância local do **GitLab**, cobrindo três camadas:
+interface gráfica, API REST e linha de comando. Desenvolvida durante o curso de Cypress (intermediário)
+da Escola TAT.
 
-## O que você vai aprender
+## O que é testado
 
-Durante o curso de testes automatizados com Cypress (intermediário) você vai aprender:
+| Camada | Testes |
+|---|---|
+| **GUI** | login, logout, criar projeto, criar issue, adicionar label e milestone a uma issue |
+| **API** | criar projeto e criar issue via API v4, com autenticação por token |
+| **CLI** | `git clone` de um projeto criado pelos testes, usando `cy.exec` |
 
-- Como configurar o ambiente local de desenvolvimento
-- Como instalar e configurar o Cypress
-- Como criar testes automatizados de interface gráfica de usuário
-- Como criar testes automatizados de API (com _feedback_ visual no navegador)
-- Como testar APIs que necessitam um _token_ de acesso
-- Como criar testes otimizados e direto-ao-ponto
-- Como salvar a sessão do usuário no navegador para posterior restauração
-- Como validar se a sessão do usuário ainda é válida e como lidar com isso quando a mesma é invalidada
-- Como fazer a limpeza e criação da massa de dados antes do teste começar
-- Como proteger dados sensíveis, tais como senhas e _tokens_ de acesso
-- Como organizar os testes e comandos customizados em diferentes "camadas" (_API, CLI, GUI_)
-- Como estruturar os testes pensando em pré-condições, ações e resultados esperados
-- Como gerar dados aleatórios para uso nos testes automatizados
-- Como habilitar funcionalidades experimentais do Cypress
-- Como executar comandos à nível de sistema operacional
-- E como testar a leitura de arquivos
+## Técnicas usadas
 
-## Vamos começar?
+- **Comandos customizados separados por camada** (`gui_commands.js`, `api_commands.js`, `cli_commands.js`).
+- **Pré-condições pela API**: o projeto e a issue são criados via API antes do teste de GUI, que testa
+  só a ação de interesse. Os testes ficam mais rápidos e menos frágeis.
+- **Limpeza do ambiente** antes de cada teste (exclusão dos projetos via API).
+- **Sessão em cache** com `cy.session` para não repetir o login.
+- **Dados dinâmicos** com Faker, evitando conflito entre execuções.
+- **Dados sensíveis** (senha e token) fora do código, em `cypress.env.json`.
 
-Vá para a seção [estrutura do curso](./lessons/_course-structure_.md).
+## Como rodar
 
-___
+**Pré-requisitos:** Node.js, Docker e uma instância do GitLab rodando localmente (o roteiro de
+configuração está em [`lessons/`](lessons/)).
 
-Este é mais um curso da [**Escola Talking About Testing**](https://udemy.com/user/walmyr).
+```bash
+npm install
+
+# crie cypress.env.json com user_password e gitlab_access_token
+npx cypress run     # headless
+npx cypress open    # interativo
+```
+
+## Créditos
+
+Baseado no curso [Testes automatizados com Cypress (intermediário)](https://github.com/wlsf82/cypress-intermediario-v2),
+de Walmyr Filho (Escola TAT). Os testes e comandos deste repositório foram escritos por mim durante o curso.
